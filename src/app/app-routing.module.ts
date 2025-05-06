@@ -4,10 +4,9 @@ import { ListaComponent } from './usuarios/lista/lista.component';
 import { UsuarioComponent } from './usuarios/usuario/usuario.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: ListaComponent},
   { path: 'usuario/:id', component: UsuarioComponent },
-  { path: '**', component: ListaComponent }
+  { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({
