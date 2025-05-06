@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { UsuarioService } from '../../services/usuario.service';
 import { Usuario } from '../../models/usuario.model';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store/app.reducer';
+import { cargarUsuarios } from '../../store/actions';
+import Swal, { SweetAlertIcon } from 'sweetalert2'
 
 @Component({
   selector: 'app-lista',
@@ -13,12 +16,38 @@ export class ListaComponent {
   usuarios!: Usuario[];
 
   constructor(
-    private usuarioService: UsuarioService
+    private store: Store<AppState>
   ){}
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    this.usuarioService.getUsers().subscribe((users)=>this.usuarios = users)
+    // this.usuarioService.getUsers().subscribe((users)=>this.usuarios = users)
+    this.store.dispatch(cargarUsuarios());
+    this.store.select('usuarios').subscribe((state) => {
+      this.usuarios=state.users;
+      if (state.error) this.alert('ERROR', state.error.message, undefined ,'error');
+      if (state.loading) this.alert('CARGANDO.....','Espere por favor.', true);
+      if (state.loaded) Swal.close();
+    })
+  }
+
+
+  alert(title: string, text: string, loading: boolean = false, icon?: SweetAlertIcon) {
+    if (icon)
+      Swal.fire({
+        title,
+        text,
+        icon,
+        didOpen: () => {
+          if (loading) Swal.showLoading();
+        }
+      });
+    else
+    Swal.fire({
+      title,
+      text,
+      didOpen: () => {
+        if (loading) Swal.showLoading();
+      }
+    });
   }
 }

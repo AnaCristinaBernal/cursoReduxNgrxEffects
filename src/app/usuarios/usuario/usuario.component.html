@@ -1,1 +1,12 @@
-<p>usuario works!</p>
+<div class="card-columns">
+  <img class="card-img-top" [src]="usuario.avatar">
+  <div class="card-body">
+    <h5 class="card-title"> {{ usuario.first_name }} {{ usuario.last_name }} </h5>
+    <p class="card-text">This is a longer card with supporting.</p>
+    <p class="card-text">
+      <span class="text-muted">
+        ID: {{ usuario.id }}
+      </span>
+    </p>
+  </div>
+</div>
